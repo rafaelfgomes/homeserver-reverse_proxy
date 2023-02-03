@@ -1,0 +1,35 @@
+version: "2.1"
+
+services:
+  heimdall:
+    image: lscr.io/linuxserver/heimdall
+    container_name: heimdall
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TIMEZONE}
+    volumes:
+      - data:/config
+    restart: unless-stopped
+  swag:
+    image: lscr.io/linuxserver/swag
+    container_name: swag
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TIMEZONE}
+      - URL=${URL}
+      - SUBDOMAINS=${SUBDOMAINS}
+      - VALIDATION=${VALIDATION}
+      - DUCKDNSTOKEN=${DUCKDNS_TOKEN}
+      - EMAIL=${EMAIL}
+    volumes:
+      - ${CONFIG_PATH}:/config
+    ports:
+      - 443:443
+    restart: unless-stopped
+
+volumes:
+  data:
